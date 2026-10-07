@@ -276,3 +276,8 @@ footer small { display: block; max-width: 62em; line-height: 1.55; }
 
 /* Highlighted disciplines in the hero text */
 .lead .hl { color: var(--lime); font-weight: 600; background: linear-gradient(transparent 82%, rgba(197, 232, 74, .35) 82%); padding-bottom: 1px; }
+
+.foot-links { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.foot-links a { color: var(--text); text-decoration: none; font-weight: 500; }
+.foot-links a:hover { color: var(--lime); text-decoration: underline; }
+.doc h3 { font-family: var(--body); font-size: 1.12rem; font-weight: 700; text-transform: none; letter-spacing: 0; line-height: 1.35; margin: 28px 0 8px; color: var(--text); }
