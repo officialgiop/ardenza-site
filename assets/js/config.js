@@ -1,3 +1,3 @@
-// The only thing to set when the app is on the App Store: paste its link here.
-// While it is empty, every "Scarica / Download" button shows "Presto su App Store / Coming soon" and does nothing.
-window.ARDENZA = { appStoreUrl: "" };
+// App Store link of the published app. Every "Scarica / Download" button uses it.
+// If it is ever empty, the buttons go back to "Presto su App Store / Coming soon" and do nothing.
+window.ARDENZA = { appStoreUrl: "https://apps.apple.com/it/app/ardenza/id6819624261" };
