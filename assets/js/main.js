@@ -22,11 +22,34 @@
     } catch (e) { /* keep the plain App Store link */ }
   }
 
+  // Visit counter (GoatCounter): no cookies, no personal data. Loads only when config.js names a site.
+  // Besides page views it counts clicks on the App Store badges as events (see the loop below).
+  var counterOn = false;
+  (function () {
+    var code = (cfg.goatcounter || "").trim();
+    if (!/^[a-z0-9-]{2,40}$/.test(code)) return;
+    counterOn = true;
+    var s = document.createElement("script");
+    s.async = true;
+    s.src = "https://gc.zgo.at/count.js";
+    s.setAttribute("data-goatcounter", "https://" + code + ".goatcounter.com/count");
+    document.head.appendChild(s);
+  })();
+
   // App Store badge: real link when configured, dimmed and inactive otherwise (with a "soon" chip).
   document.querySelectorAll("[data-store]").forEach(function (el) {
     if (url) {
       el.setAttribute("href", url);
       el.setAttribute("rel", "noopener");
+      if (counterOn) {
+        // GoatCounter binds clicks on [data-goatcounter-click] by itself. The event name carries the ad
+        // (utm_content) so clicks can be compared with visits per ad; the title says which badge was used.
+        var adTag = "";
+        try { adTag = (new URLSearchParams(window.location.search).get("utm_content") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 40); } catch (e) {}
+        el.setAttribute("data-goatcounter-click", "click-appstore" + (adTag ? "-" + adTag : ""));
+        var pos = el.closest(".store-sm") ? "intestazione" : (el.closest(".final") ? "fondo pagina" : "in alto");
+        el.setAttribute("data-goatcounter-title", "Pulsante App Store (" + pos + ")");
+      }
     } else {
       el.removeAttribute("href");
       el.setAttribute("aria-disabled", "true");
