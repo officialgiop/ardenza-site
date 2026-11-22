@@ -46,9 +46,26 @@
         // (utm_content) so clicks can be compared with visits per ad; the title says which badge was used.
         var adTag = "";
         try { adTag = (new URLSearchParams(window.location.search).get("utm_content") || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 40); } catch (e) {}
-        el.setAttribute("data-goatcounter-click", "click-appstore" + (adTag ? "-" + adTag : ""));
+        var evName = "click-appstore" + (adTag ? "-" + adTag : "");
         var pos = el.closest(".store-sm") ? "intestazione" : (el.closest(".final") ? "fondo pagina" : "in alto");
-        el.setAttribute("data-goatcounter-title", "Pulsante App Store (" + pos + ")");
+        var evTitle = "Pulsante App Store (" + pos + ")";
+        // The click opens the App Store and unloads the page, so count.js can lose the event. We send it
+        // ourselves, at the end of the tap (pointerup; a scroll ends in pointercancel and is not counted), with a keepalive request that
+        // survives the navigation. One event per badge per page view; count.js does not bind this badge.
+        var sent = false;
+        var send = function () {
+          if (sent) return; sent = true;
+          try {
+            var code = (cfg.goatcounter || "").trim();
+            var qs = "p=" + encodeURIComponent(evName) + "&e=true&t=" + encodeURIComponent(evTitle) +
+              "&r=" + encodeURIComponent(document.referrer || "") + "&s=" + [screen.width, screen.height, window.devicePixelRatio || 1].join(",") +
+              "&rnd=" + Math.random().toString(36).slice(2, 8);
+            var u = "https://" + code + ".goatcounter.com/count?" + qs;
+            if (window.fetch) fetch(u, { method: "GET", mode: "no-cors", keepalive: true, credentials: "omit" }).catch(function () {});
+            else new Image().src = u;
+          } catch (e) {}
+        };
+        ["pointerup", "click"].forEach(function (t) { el.addEventListener(t, send, { passive: true, capture: true }); });
       }
     } else {
       el.removeAttribute("href");
