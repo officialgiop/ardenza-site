@@ -59,6 +59,8 @@
     }
   });
   if (url) document.querySelectorAll("[data-soon-chip]").forEach(function (n) { n.hidden = true; });
+  // Invito al clic ("Tocca per scaricare gratis" con freccia): solo se il link App Store esiste.
+  if (url) document.querySelectorAll("[data-store-hint]").forEach(function (n) { n.hidden = false; });
 
   // Header border once scrolled.
   var nav = document.querySelector(".nav");

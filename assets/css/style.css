@@ -273,6 +273,16 @@ footer small { display: block; max-width: 62em; line-height: 1.55; }
 .store-sm .soon-chip { display: none; }
 @media (max-width: 420px) { .store-lg { flex-wrap: wrap; } }
 .final .store { justify-content: center; }
+/* Invito al clic: il badge può sembrare un banner. Freccia che indica il badge e un alone leggero (spenti con "riduci movimento"). */
+.store-lg { flex-direction: column; align-items: flex-start; gap: 12px; }
+.final .store-lg { align-items: center; }
+.store-hint { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: .95rem; letter-spacing: .03em; color: var(--lime); }
+.store-hint[hidden] { display: none; }
+.store-hint svg { width: 20px; height: 20px; flex: none; animation: nudge 1.4s ease-in-out infinite; }
+.badge:not(.is-soon) { animation: glow 2.6s ease-in-out infinite; }
+@keyframes nudge { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(197, 232, 74, 0); } 50% { box-shadow: 0 0 0 7px rgba(197, 232, 74, .30); } }
+@media (prefers-reduced-motion: reduce) { .store-hint svg, .badge:not(.is-soon) { animation: none; } }
 
 /* Highlighted disciplines in the hero text */
 .lead .hl { color: var(--lime); font-weight: 600; background: linear-gradient(transparent 82%, rgba(197, 232, 74, .35) 82%); padding-bottom: 1px; }
